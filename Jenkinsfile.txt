@@ -59,7 +59,7 @@ pipeline {
             body: "Pipeline completed successfully.",
             to: "${env.STAGE_EMAIL}",
             attachLog: true
-            
+            )
         }
 
         failure {
