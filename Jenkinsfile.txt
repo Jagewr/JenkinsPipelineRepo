@@ -1,51 +1,73 @@
 pipeline {
     agent any
 
+    environment {
+        STAGE_EMAIL = 'hd7137478@gmail.com' // Replace with actual email address
+    }
+
     stages {
         stage('Build') {
             steps {
-                echo "Build the code using a build automation tool like Maven."
+                echo "Stage 1: Build - Building the code using Maven to compile and package the application."
             }
         }
-        
+
         stage('Unit and Integration Tests') {
             steps {
-                echo "Run unit tests and integration tests using a test automation tool like JUnit or TestNG."
+                echo "Stage 2: Unit and Integration Tests - Running unit tests with JUnit and integration tests with TestNG."
             }
         }
-        
+
         stage('Code Analysis') {
             steps {
-                echo "Analyze the code using a tool like SonarQube to ensure it meets industry standards."
+                echo "Stage 3: Code Analysis - Analyzing the code using SonarQube to ensure it meets industry standards."
             }
         }
-        
+
         stage('Security Scan') {
             steps {
-                echo "Perform a security scan using a tool like OWASP Dependency-Check to identify vulnerabilities."
+                echo "Stage 4: Security Scan - Performing a security scan using OWASP Dependency-Check to identify vulnerabilities."
             }
         }
-        
+
         stage('Deploy to Staging') {
             steps {
-                echo "Deploy the application to a staging server, such as an AWS EC2 instance."
+                echo "Stage 5: Deploy to Staging - Deploying the application to a staging server, such as an AWS EC2 instance."
             }
         }
-        
+
         stage('Integration Tests on Staging') {
             steps {
-                echo "Run integration tests on the staging environment to ensure functionality in a production-like environment."
+                echo "Stage 6: Integration Tests on Staging - Running integration tests on the staging environment to ensure the application functions as expected."
             }
         }
-        
+
         stage('Deploy to Production') {
             steps {
-                echo "Deploy the application to a production server, such as an AWS EC2 instance."
+                echo "Stage 7: Deploy to Production - Deploying the application to a production server, such as an AWS EC2 instance."
             }
         }
     }
 
     post {
-        always {
-            echo "Sending notification emails to the specified email address with the status of test and security scan stages."
-           
+        success {
+            echo "Sending success notification email to ${env.STAGE_EMAIL} with logs attached."
+            emailext(
+                subject: "Jenkins Pipeline Success",
+                body: "Pipeline completed successfully.",
+                to: "${env.STAGE_EMAIL}",
+                attachLog: true
+            )
+        }
+
+        failure {
+            echo "Sending failure notification email to ${env.STAGE_EMAIL} with logs attached."
+            emailext(
+                subject: "Jenkins Pipeline Failure",
+                body: "Pipeline failed.",
+                to: "${env.STAGE_EMAIL}",
+                attachLog: true
+            )
+        }
+    }
+}
