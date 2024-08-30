@@ -53,6 +53,7 @@ pipeline {
         success {
             echo "Sending success notification email to ${env.STAGE_EMAIL} with logs attached."
             emailext(
+                mail to: "hd7137478@gmail.com",
                 subject: "Jenkins Pipeline Success",
                 body: "Pipeline completed successfully.",
                 to: "${env.STAGE_EMAIL}",
@@ -63,6 +64,7 @@ pipeline {
         failure {
             echo "Sending failure notification email to ${env.STAGE_EMAIL} with logs attached."
             emailext(
+                mail to: "hd7137478@gmail.com",
                 subject: "Jenkins Pipeline Failure",
                 body: "Pipeline failed.",
                 to: "${env.STAGE_EMAIL}",
