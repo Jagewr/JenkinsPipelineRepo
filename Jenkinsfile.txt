@@ -1,9 +1,7 @@
 pipeline {
     agent any
 
-    environment {
-        STAGE_EMAIL = 'hd7137478@gmail.com' // Replace with actual email address
-    }
+    
 
     stages {
         stage('Build') {
@@ -52,21 +50,19 @@ pipeline {
     post {
         success {
             echo "Sending success notification email to ${env.STAGE_EMAIL} with logs attached."
-            emailext(
-                subject: "Jenkins Pipeline Success",
-                body: "Pipeline completed successfully.",
-                to: "hd7137478@gmail.com",
-                attachLog: true
-            )
+            mail to: "hd7137478@gmail.com"      
+            subject: "Jenkins Pipeline Success",
+            body: "Pipeline completed successfully.",
+            attachLog: true
+            
         }
 
         failure {
             echo "Sending failure notification email to ${env.STAGE_EMAIL} with logs attached."
-            emailext(
-                subject: "Jenkins Pipeline Failure",
-                body: "Pipeline failed.",
-                to: "hd7137478@gmail.com",
-                attachLog: true
+            mail to: "hd7137478@gmail.com"   
+            subject: "Jenkins Pipeline Failure",
+            body: "Pipeline failed.",
+            attachLog: true
             )
         }
     }
