@@ -1,9 +1,6 @@
 pipeline {
     agent any
 
- 
-    
-
     stages {
         stage('Build') {
             steps {
@@ -50,17 +47,27 @@ pipeline {
 
     post {
         success {
-            echo "Sending success notification email to hd7137478@gmai.com with logs attached."
-            mail to: "hd7137478@gmail.com",
-            subject: "Jenkins Pipeline Success",
-            body: "Pipeline Success"
+            echo "Sending success notification email to hd7137478@gmail.com with logs attached."
+            emailext(
+                to: "hd7137478@gmail.com",
+                subject: "Jenkins Pipeline Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """<p>The Jenkins pipeline job <b>${env.JOB_NAME}</b> has completed successfully.</p>
+                         <p>Build Number: ${env.BUILD_NUMBER}</p>
+                         <p>View the build details <a href="${env.BUILD_URL}">here</a>.</p>""",
+                attachLog: true // Attach the build log to the email
+            )
         }
 
         failure {
             echo "Sending failure notification email to hd7137478@gmail.com with logs attached."
-            mail to: "hd7137478@gmail.com",
-            subject: "Jenkins Pipeline Failure",
-            body: "Pipeline Failure"
+            emailext(
+                to: "hd7137478@gmail.com",
+                subject: "Jenkins Pipeline Failure: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """<p>The Jenkins pipeline job <b>${env.JOB_NAME}</b> has failed.</p>
+                         <p>Build Number: ${env.BUILD_NUMBER}</p>
+                         <p>View the build details <a href="${env.BUILD_URL}">here</a>.</p>""",
+                attachLog: true // Attach the build log to the email
+            )
         }
     }
 }
